@@ -40,11 +40,39 @@ function ready(id) {
   return el;
 }
 
-export function renderToday(games, feeds) {
+export function renderUpcoming(games) {
+  const today = localDateStr();
+  const upcoming = games
+    .filter(g => (g.localDate ?? g.gameDate.slice(0, 10)) > today)
+    .slice(0, 4);
+
+  if (!upcoming.length) return '';
+
+  const rows = upcoming.map(g => {
+    const isHome = g.teams.home.team.id === TEAM_ID;
+    const opp    = isHome ? g.teams.away : g.teams.home;
+    const date   = g.localDate ?? g.gameDate.slice(0, 10);
+    const dateLabel = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {
+      weekday: 'short', month: 'numeric', day: 'numeric',
+    });
+    return `
+      <div class="upcoming-row">
+        <span class="upcoming-date">${dateLabel}</span>
+        <span class="upcoming-ha">${isHome ? 'vs' : '@'}</span>
+        <span class="upcoming-opp">${opp.team.abbreviation}</span>
+        <span class="upcoming-time">${gameTime(g.gameDate)}</span>
+      </div>`;
+  }).join('');
+
+  return `<div class="upcoming-section"><div class="upcoming-header">Upcoming</div>${rows}</div>`;
+}
+
+export function renderToday(games, feeds, allGames = []) {
   const el = ready('today-content');
 
   if (!games?.length) {
-    el.innerHTML = `<div class="no-game">No game today.</div>`;
+    const upcomingHtml = allGames.length ? renderUpcoming(allGames) : '';
+    el.innerHTML = `<div class="no-game">No game today.</div>${upcomingHtml}`;
     return;
   }
 
@@ -129,22 +157,25 @@ export function renderToday(games, feeds) {
         ${situationHtml}
         ${pitcherHtml}
       </div>`;
-  }).join('');
+  }).join('') + (allGames.length ? renderUpcoming(allGames) : '');
 }
 
 // ── Schedule ──────────────────────────────────────────────────────────────────
 
-export function renderSchedule(games, filter = 'all') {
+export function renderSchedule(games, filter = 'all', hideSpringTraining = true) {
   const el    = ready('schedule-content');
   const today = localDateStr();
 
-  let list = games;
-  if (filter === 'home') list = games.filter(g => g.teams.home.team.id === TEAM_ID);
-  if (filter === 'away') list = games.filter(g => g.teams.away.team.id === TEAM_ID);
+  const regularOnly = g => g.gameType === 'R';
+  const displayGames = hideSpringTraining ? games.filter(regularOnly) : games;
 
-  // Season record from all games (not just filtered)
+  let list = displayGames;
+  if (filter === 'home') list = displayGames.filter(g => g.teams.home.team.id === TEAM_ID);
+  if (filter === 'away') list = displayGames.filter(g => g.teams.away.team.id === TEAM_ID);
+
+  // Record counts only regular season finals
   let wins = 0, losses = 0;
-  for (const g of games) {
+  for (const g of games.filter(regularOnly)) {
     if (g.status.abstractGameState !== 'Final') continue;
     const isHome = g.teams.home.team.id === TEAM_ID;
     const mil = isHome ? g.teams.home : g.teams.away;

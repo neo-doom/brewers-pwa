@@ -11,6 +11,8 @@
   <title>Brewers</title>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -37,6 +39,7 @@
         <button class="filter active" data-filter="all">All</button>
         <button class="filter" data-filter="home">Home</button>
         <button class="filter" data-filter="away">Away</button>
+        <button class="filter filter-toggle active" id="hide-st-toggle" data-filter-toggle="hide-st">Hide ST</button>
       </div>
       <div id="schedule-content" class="loading-state">
         <div class="spinner"></div>
