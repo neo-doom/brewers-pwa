@@ -1,23 +1,26 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:        #0F0F0F;
-  --surface:   #1A1A1A;
-  --surface-2: #242424;
-  --text:      #FFFFFF;
-  --muted:     #888888;
-  --gold:      #FFC52F;
-  --win:       #4CAF50;
-  --loss:      #E53935;
-  --border:    #2A2A2A;
-  --radius:    6px;
+  --bg:         #F0EAE0;
+  --surface:    #FFFFFF;
+  --surface-2:  #E8E1D5;
+  --header-bg:  #12284B;
+  --text:       #1A1A2E;
+  --muted:      #7A7060;
+  --gold:       #B8872A;
+  --gold-bright:#FFC52F;
+  --navy:       #12284B;
+  --win:        #2A7D3B;
+  --loss:       #C0392B;
+  --border:     #D5CCBB;
+  --radius:     10px;
 }
 
 html, body {
   height: 100%;
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 15px;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
@@ -29,23 +32,22 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px 12px;
-  border-bottom: 1px solid var(--border);
+  padding: 16px 20px 14px;
+  background: var(--header-bg);
 }
 
 .wordmark {
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 18px;
-  letter-spacing: 0.14em;
-  color: var(--gold);
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--gold-bright);
 }
 
 .refresh-indicator {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--gold);
+  background: var(--gold-bright);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -59,6 +61,7 @@ header {
 
 .tabs {
   display: flex;
+  background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
 
@@ -69,16 +72,17 @@ header {
   border: none;
   border-bottom: 2px solid transparent;
   color: var(--muted);
+  font-family: inherit;
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s;
 }
 
 .tab.active {
-  color: var(--gold);
+  color: var(--navy);
   border-bottom-color: var(--gold);
 }
 
@@ -108,7 +112,7 @@ header {
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0.4; }
+  50%       { opacity: 0.35; }
 }
 
 .error-state, .no-game, .no-data {
@@ -124,16 +128,16 @@ header {
 .badge {
   display: inline-block;
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.07em;
-  padding: 3px 7px;
-  border-radius: 3px;
+  padding: 3px 8px;
+  border-radius: 4px;
 }
 
 .badge-live       { background: var(--loss); color: #fff; animation: pulse 1.4s infinite; }
 .badge-final      { background: var(--surface-2); color: var(--muted); }
-.badge-preview    { background: var(--surface-2); color: var(--muted); }
-.badge-postponed  { background: #4A3728; color: #FFCC80; }
+.badge-preview    { background: var(--navy); color: #fff; }
+.badge-postponed  { background: #F5E6C8; color: #8B5E1A; }
 
 /* ── Score card (Today view) ─────────────────────────── */
 
@@ -142,7 +146,8 @@ header {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 20px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(18, 40, 75, 0.07);
 }
 
 .score-card-header {
@@ -156,15 +161,16 @@ header {
   color: var(--muted);
   margin-left: auto;
   font-size: 12px;
-  letter-spacing: 0.03em;
+  font-weight: 500;
 }
 
 .dh-label {
   font-size: 11px;
+  font-weight: 600;
   color: var(--muted);
   background: var(--surface-2);
   padding: 2px 7px;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 /* ── Matchup ─────────────────────────────────────────── */
@@ -175,37 +181,39 @@ header {
   display: flex;
   align-items: baseline;
   gap: 10px;
-  padding: 7px 0;
+  padding: 8px 0;
   border-bottom: 1px solid var(--border);
 }
 
 .team-row:last-child { border-bottom: none; }
 
 .team-abbr {
-  font-family: 'Courier New', Courier, monospace;
   font-weight: 700;
   font-size: 20px;
-  width: 44px;
+  width: 46px;
   flex-shrink: 0;
+  letter-spacing: 0.02em;
 }
 
 .team-record {
   flex: 1;
   font-size: 12px;
   color: var(--muted);
+  font-weight: 500;
 }
 
 .team-score {
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 36px;
-  font-weight: 700;
+  font-size: 38px;
+  font-weight: 800;
   min-width: 54px;
   text-align: right;
-  color: var(--muted);
+  color: var(--border);
+  letter-spacing: -0.02em;
 }
 
-.team-row.winner .team-score { color: var(--gold); }
-.team-row.brewers-row .team-abbr { color: var(--gold); }
+.team-row.winner .team-score { color: var(--text); }
+.team-row.brewers-row .team-abbr { color: var(--navy); }
+.team-row.brewers-row.winner .team-score { color: var(--gold); }
 
 /* ── Game situation (live) ───────────────────────────── */
 
@@ -221,14 +229,12 @@ header {
 .inning { color: var(--text); font-weight: 600; font-size: 14px; }
 
 .runners {
-  font-family: 'Courier New', Courier, monospace;
   font-size: 17px;
   letter-spacing: 3px;
   color: var(--gold);
 }
 
 .count {
-  font-family: 'Courier New', Courier, monospace;
   font-size: 13px;
   color: var(--muted);
   margin-top: 6px;
@@ -244,23 +250,85 @@ header {
 .game-time {
   font-size: 13px;
   color: var(--muted);
+  font-weight: 500;
   margin-top: 10px;
+}
+
+/* ── Upcoming mini schedule (Today view) ─────────────── */
+
+.upcoming-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(18, 40, 75, 0.07);
+}
+
+.upcoming-header {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+.upcoming-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.upcoming-row:last-child { border-bottom: none; }
+
+.upcoming-date {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  width: 68px;
+  flex-shrink: 0;
+}
+
+.upcoming-ha {
+  font-size: 12px;
+  color: var(--muted);
+  width: 18px;
+  text-align: center;
+}
+
+.upcoming-opp {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.upcoming-time {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
 }
 
 /* ── Schedule ────────────────────────────────────────── */
 
 .schedule-filters {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   padding: 0 0 16px;
 }
 
 .filter {
-  padding: 6px 16px;
+  padding: 6px 14px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 20px;
   color: var(--muted);
+  font-family: inherit;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -268,18 +336,31 @@ header {
 }
 
 .filter.active {
+  border-color: var(--navy);
+  color: var(--navy);
+  background: rgba(18, 40, 75, 0.07);
+  font-weight: 600;
+}
+
+.filter-toggle {
+  margin-left: auto;
+  border-radius: 6px;
+}
+
+.filter-toggle.active {
   border-color: var(--gold);
   color: var(--gold);
-  background: rgba(255, 197, 47, 0.08);
+  background: rgba(184, 135, 42, 0.08);
+  font-weight: 600;
 }
 
 .season-record {
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--gold);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--navy);
   text-align: center;
   padding: 4px 0 22px;
+  letter-spacing: -0.01em;
 }
 
 .month-group { margin-bottom: 4px; }
@@ -305,9 +386,9 @@ header {
 }
 
 .schedule-row.today-row {
-  background: rgba(255, 197, 47, 0.06);
+  background: rgba(18, 40, 75, 0.05);
   border-radius: var(--radius);
-  border: 1px solid rgba(255, 197, 47, 0.2);
+  border: 1px solid rgba(18, 40, 75, 0.15);
   margin: 2px -6px;
   padding: 10px 12px;
 }
@@ -315,9 +396,10 @@ header {
 .sched-date {
   font-size: 13px;
   color: var(--muted);
+  font-weight: 500;
 }
 
-.today-row .sched-date { color: var(--gold); font-weight: 600; }
+.today-row .sched-date { color: var(--navy); font-weight: 700; }
 
 .sched-ha {
   font-size: 12px;
@@ -326,7 +408,6 @@ header {
 }
 
 .sched-opp {
-  font-family: 'Courier New', Courier, monospace;
   font-weight: 700;
   font-size: 14px;
 }
@@ -349,21 +430,17 @@ header {
 .result-wl.win  { color: var(--win); }
 .result-wl.loss { color: var(--loss); }
 
-.result-score {
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 13px;
-}
-
-.result-ppd  { color: #FFCC80; font-size: 12px; }
-.result-time { color: var(--muted); }
+.result-score { font-size: 13px; font-weight: 500; }
+.result-ppd   { color: #8B5E1A; font-size: 12px; font-weight: 600; }
+.result-time  { color: var(--muted); font-weight: 500; }
 
 .badge-live-sm {
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 700;
   background: var(--loss);
   color: #fff;
   padding: 2px 5px;
-  border-radius: 2px;
+  border-radius: 3px;
   animation: pulse 1.4s infinite;
 }
 
@@ -393,7 +470,7 @@ header {
   letter-spacing: 0.06em;
   color: var(--muted);
   padding: 0 10px 10px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
   white-space: nowrap;
 }
 
@@ -407,19 +484,18 @@ header {
   text-align: right;
   padding: 11px 10px;
   border-bottom: 1px solid var(--border);
-  font-family: 'Courier New', Courier, monospace;
   font-size: 14px;
   white-space: nowrap;
+  font-weight: 500;
 }
 
 .standings-table td:first-child {
-  font-family: -apple-system, sans-serif;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 700;
   padding-left: 0;
 }
 
-.brewers-row { background: rgba(255, 197, 47, 0.07); }
-.brewers-row td { color: var(--gold); }
+.brewers-row { background: rgba(18, 40, 75, 0.05); }
+.brewers-row td { color: var(--navy); }
+.brewers-row td:first-child { color: var(--gold); }
 
 .streak { font-size: 12px; }

@@ -9,10 +9,11 @@ if ('serviceWorker' in navigator) {
 
 // ── State ─────────────────────────────────────────────────────────────────────
 
-let currentView   = 'today';
-let scheduleFilter = 'all';
-let refreshTimer  = null;
-const indicator   = document.getElementById('refresh-indicator');
+let currentView        = 'today';
+let scheduleFilter     = 'all';
+let hideSpringTraining = true;
+let refreshTimer       = null;
+const indicator        = document.getElementById('refresh-indicator');
 
 // ── Tab navigation ────────────────────────────────────────────────────────────
 
@@ -40,13 +41,22 @@ document.querySelectorAll('.tab').forEach(btn => {
 
 // ── Schedule filters ──────────────────────────────────────────────────────────
 
-document.querySelectorAll('.filter').forEach(btn => {
+document.querySelectorAll('.filter:not(.filter-toggle)').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter').forEach(f => f.classList.remove('active'));
+    document.querySelectorAll('.filter:not(.filter-toggle)').forEach(f => f.classList.remove('active'));
     btn.classList.add('active');
     scheduleFilter = btn.dataset.filter;
     loadSchedule();
   });
+});
+
+// ── Spring training toggle ────────────────────────────────────────────────────
+
+const stToggle = document.getElementById('hide-st-toggle');
+stToggle.addEventListener('click', () => {
+  hideSpringTraining = !hideSpringTraining;
+  stToggle.classList.toggle('active', hideSpringTraining);
+  loadSchedule();
 });
 
 // ── Data loading ──────────────────────────────────────────────────────────────
@@ -56,10 +66,13 @@ async function loadToday() {
   pulseIndicator();
 
   try {
-    const games = await fetchTodayGames();
+    const [games, allGames] = await Promise.all([
+      fetchTodayGames(),
+      fetchSchedule().catch(() => []),
+    ]);
 
     if (!games.length) {
-      renderToday([], null);
+      renderToday([], null, allGames);
       scheduleRefresh(false);
       return;
     }
@@ -74,7 +87,7 @@ async function loadToday() {
       })
     );
 
-    renderToday(games, feeds);
+    renderToday(games, feeds, allGames);
     scheduleRefresh(isLive);
   } catch {
     renderError('today-content', 'Could not load game data.<br>Check your connection and try again.');
@@ -85,7 +98,7 @@ async function loadToday() {
 async function loadSchedule() {
   try {
     const games = await fetchSchedule();
-    renderSchedule(games, scheduleFilter);
+    renderSchedule(games, scheduleFilter, hideSpringTraining);
   } catch {
     renderError('schedule-content', 'Could not load schedule.');
   }
@@ -106,7 +119,6 @@ function loadView(view) {
   if (view === 'standings') loadStandings();
 }
 
-// Refresh every 30s during live games, every 5 min otherwise
 function scheduleRefresh(isLive) {
   const delay = isLive ? 30_000 : 5 * 60_000;
   refreshTimer = setTimeout(() => {
