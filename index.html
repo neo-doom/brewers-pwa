@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#FFC52F">
+  <meta name="description" content="Milwaukee Brewers scores and schedule tracker">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Brewers">
+  <title>Brewers</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h1 class="wordmark">BREWERS</h1>
+    <span id="refresh-indicator" class="refresh-indicator" aria-hidden="true"></span>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="App sections">
+    <button class="tab active" role="tab" aria-selected="true" data-view="today">Today</button>
+    <button class="tab" role="tab" aria-selected="false" data-view="schedule">Schedule</button>
+    <button class="tab" role="tab" aria-selected="false" data-view="standings">Standings</button>
+  </nav>
+
+  <main>
+    <section id="view-today" class="view active" role="tabpanel" aria-label="Today's game">
+      <div id="today-content" class="loading-state">
+        <div class="spinner"></div>
+      </div>
+    </section>
+
+    <section id="view-schedule" class="view" role="tabpanel" aria-label="Season schedule" hidden>
+      <div class="schedule-filters">
+        <button class="filter active" data-filter="all">All</button>
+        <button class="filter" data-filter="home">Home</button>
+        <button class="filter" data-filter="away">Away</button>
+      </div>
+      <div id="schedule-content" class="loading-state">
+        <div class="spinner"></div>
+      </div>
+    </section>
+
+    <section id="view-standings" class="view" role="tabpanel" aria-label="NL Central standings" hidden>
+      <div id="standings-content" class="loading-state">
+        <div class="spinner"></div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
