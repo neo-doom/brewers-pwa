@@ -162,7 +162,7 @@ export function renderToday(games, feeds, allGames = []) {
 
 // ── Schedule ──────────────────────────────────────────────────────────────────
 
-export function renderSchedule(games, filter = 'all', hideSpringTraining = true) {
+export function renderSchedule(games, filter = 'all', hideSpringTraining = true, scrollToToday = false) {
   const el    = ready('schedule-content');
   const today = localDateStr();
 
@@ -244,8 +244,10 @@ export function renderSchedule(games, filter = 'all', hideSpringTraining = true)
 
   el.innerHTML = html;
 
-  const todayRow = el.querySelector('.today-row');
-  if (todayRow) todayRow.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  if (scrollToToday) {
+    const todayRow = el.querySelector('.today-row');
+    if (todayRow) todayRow.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
 }
 
 // ── Standings ─────────────────────────────────────────────────────────────────

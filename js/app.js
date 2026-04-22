@@ -12,6 +12,7 @@ if ('serviceWorker' in navigator) {
 let currentView        = 'today';
 let scheduleFilter     = 'all';
 let hideSpringTraining = true;
+let scheduleLoaded     = false;
 let refreshTimer       = null;
 const indicator        = document.getElementById('refresh-indicator');
 
@@ -41,22 +42,23 @@ document.querySelectorAll('.tab').forEach(btn => {
 
 // ── Schedule filters ──────────────────────────────────────────────────────────
 
-document.querySelectorAll('.filter:not(.filter-toggle)').forEach(btn => {
+document.querySelectorAll('.filter').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter:not(.filter-toggle)').forEach(f => f.classList.remove('active'));
+    document.querySelectorAll('.filter').forEach(f => f.classList.remove('active'));
     btn.classList.add('active');
     scheduleFilter = btn.dataset.filter;
-    loadSchedule();
+    loadSchedule(false); // don't re-scroll when filtering
   });
 });
 
 // ── Spring training toggle ────────────────────────────────────────────────────
 
 const stToggle = document.getElementById('hide-st-toggle');
+stToggle.classList.toggle('active', hideSpringTraining);
 stToggle.addEventListener('click', () => {
   hideSpringTraining = !hideSpringTraining;
   stToggle.classList.toggle('active', hideSpringTraining);
-  loadSchedule();
+  loadSchedule(false); // don't re-scroll when toggling
 });
 
 // ── Data loading ──────────────────────────────────────────────────────────────
@@ -95,10 +97,12 @@ async function loadToday() {
   }
 }
 
-async function loadSchedule() {
+async function loadSchedule(scrollToToday = false) {
   try {
     const games = await fetchSchedule();
-    renderSchedule(games, scheduleFilter, hideSpringTraining);
+    const isInitial = !scheduleLoaded;
+    scheduleLoaded = true;
+    renderSchedule(games, scheduleFilter, hideSpringTraining, scrollToToday || isInitial);
   } catch {
     renderError('schedule-content', 'Could not load schedule.');
   }
