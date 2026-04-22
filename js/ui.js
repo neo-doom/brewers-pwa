@@ -162,7 +162,7 @@ export function renderToday(games, feeds, allGames = []) {
 
 // ── Schedule ──────────────────────────────────────────────────────────────────
 
-export function renderSchedule(games, filter = 'all', hideSpringTraining = true) {
+export function renderSchedule(games, filter = 'all', hideSpringTraining = true, scrollToToday = false) {
   const el    = ready('schedule-content');
   const today = localDateStr();
 
@@ -173,15 +173,18 @@ export function renderSchedule(games, filter = 'all', hideSpringTraining = true)
   if (filter === 'home') list = displayGames.filter(g => g.teams.home.team.id === TEAM_ID);
   if (filter === 'away') list = displayGames.filter(g => g.teams.away.team.id === TEAM_ID);
 
-  // Record counts only regular season finals
+  // Record counts only regular season finals with a decisive result
   let wins = 0, losses = 0;
   for (const g of games.filter(regularOnly)) {
     if (g.status.abstractGameState !== 'Final') continue;
     const isHome = g.teams.home.team.id === TEAM_ID;
     const mil = isHome ? g.teams.home : g.teams.away;
     const opp = isHome ? g.teams.away : g.teams.home;
-    if ((mil.score ?? 0) > (opp.score ?? 0)) wins++;
-    else losses++;
+    const milScore = mil.score ?? 0;
+    const oppScore = opp.score ?? 0;
+    if (milScore > oppScore) wins++;
+    else if (oppScore > milScore) losses++;
+    // equal scores (postponed/suspended artifacts) are intentionally skipped
   }
 
   // Group by month using localDate (YYYY-MM-DD)
@@ -241,8 +244,10 @@ export function renderSchedule(games, filter = 'all', hideSpringTraining = true)
 
   el.innerHTML = html;
 
-  const todayRow = el.querySelector('.today-row');
-  if (todayRow) todayRow.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  if (scrollToToday) {
+    const todayRow = el.querySelector('.today-row');
+    if (todayRow) todayRow.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
 }
 
 // ── Standings ─────────────────────────────────────────────────────────────────

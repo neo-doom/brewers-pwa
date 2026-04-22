@@ -342,15 +342,56 @@ header {
   font-weight: 600;
 }
 
-.filter-toggle {
+/* ── Spring training toggle switch ───────────────────── */
+
+.st-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-left: auto;
-  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
 }
 
-.filter-toggle.active {
-  border-color: var(--gold);
-  color: var(--gold);
-  background: rgba(184, 135, 42, 0.08);
+.st-toggle-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+
+.st-toggle-track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: var(--border);
+  border-radius: 10px;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.st-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+
+.st-toggle.active .st-toggle-track {
+  background: var(--navy);
+}
+
+.st-toggle.active .st-toggle-thumb {
+  transform: translateX(16px);
+}
+
+.st-toggle.active .st-toggle-label {
+  color: var(--navy);
   font-weight: 600;
 }
 
